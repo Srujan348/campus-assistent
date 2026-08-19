@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusMind AI | GM University Smart Assistant</title>
+  <meta name="description" content="Centralized AI-Powered Smart Campus Assistant for GM University Davangere. Get instant Q&A, smart search, dynamic timetable, GPA calculator, library booking, and voice support.">
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Background Glow & Particles Accent -->
+  <div class="bg-blur-orb orb-1"></div>
+  <div class="bg-blur-orb orb-2"></div>
+  <div class="bg-blur-orb orb-3"></div>
+
+  <div id="app" class="app-container">
+    <!-- TOP NAVIGATION BAR -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="brand-logo">
+          <span class="logo-badge"><i class="fa-solid fa-graduation-cap"></i></span>
+        </div>
+        <div class="brand-text">
+          <h1>GM University <span class="badge-ai">CampusMind AI</span></h1>
+          <p class="tagline"><i class="fa-solid fa-circle text-success pulse"></i> System Online &bull; GMU Knowledge Base v2026</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-link active" data-tab="dashboard"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></button>
+        <button class="nav-link" data-tab="chat"><i class="fa-solid fa-robot"></i> <span>AI Assistant</span></button>
+        <button class="nav-link" data-tab="search"><i class="fa-solid fa-magnifying-glass"></i> <span>Smart Search</span></button>
+        <button class="nav-link" data-tab="student-suite"><i class="fa-solid fa-user-graduate"></i> <span>Student Suite</span></button>
+        <button class="nav-link" data-tab="events"><i class="fa-solid fa-calendar-days"></i> <span>Events & Notices</span></button>
+        <button class="nav-link" data-tab="campus-map"><i class="fa-solid fa-map-location-dot"></i> <span>Campus Map</span></button>
+      </nav>
+
+      <div class="nav-controls">
+        <!-- Persona Switcher -->
+        <div class="persona-selector">
+          <label for="personaSelect" class="sr-only">Role Persona</label>
+          <i class="fa-solid fa-user-gear icon-persona"></i>
+          <select id="personaSelect" class="styled-select" aria-label="Select User Persona">
+            <option value="cs_student">🎓 B.Tech CSE (5th Sem)</option>
+            <option value="ece_student">⚡ B.Tech ECE (3rd Sem)</option>
+            <option value="mba_student">💼 MBA Student (1st Sem)</option>
+            <option value="aspirant">🏫 Aspirant / Parent View</option>
+            <option value="faculty">👨‍🏫 Faculty / HOD View</option>
+          </select>
+        </div>
+
+        <!-- Voice Mode Button -->
+        <button id="voiceGlobalBtn" class="btn-voice-toggle" title="Toggle Voice Output & Speech Recognition" aria-label="Voice Interaction">
+          <i class="fa-solid fa-microphone"></i>
+          <span class="voice-status">Voice Off</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="btn-icon" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <!-- Gemini API Key Settings -->
+        <button id="apiKeyBtn" class="btn-icon" title="Configure Custom AI Key" aria-label="Configure API Key">
+          <i class="fa-solid fa-key"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      
+      <!-- VIEW 1: DASHBOARD -->
+      <section id="tab-dashboard" class="tab-page active">
+        <!-- Hero Banner -->
+        <div class="hero-card">
+          <div class="hero-content">
+            <div class="greeting-badge">
+              <span id="userPersonaBadge">B.Tech Computer Science & Engineering</span>
+              <span class="semester-pill">Semester 5 &bull; GMU Davangere</span>
+            </div>
+            <h2 id="greetingTitle">Welcome to GMU CampusMind AI 👋</h2>
+            <p id="greetingSubtitle">Ask anything about admissions, syllabus, exam dates, hostel rules, fee structures, or campus facilities in plain natural language.</p>
+            
+            <!-- Quick AI Search Bar -->
+            <div class="hero-search-box">
+              <i class="fa-solid fa-wand-magic-sparkles search-icon"></i>
+              <input type="text" id="dashboardSearchInput" placeholder="Try asking: 'When are the 3rd internal exams for CSE?' or 'Show CSE fees'..." aria-label="Quick AI Ask Input">
+              <button id="dashboardSearchBtn" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Ask AI</button>
+              <button id="heroMicBtn" class="btn-secondary btn-mic" title="Click to Speak"><i class="fa-solid fa-microphone"></i></button>
+            </div>
+
+            <!-- Suggested Query Chips -->
+            <div class="prompt-chips">
+              <span class="chip-label"><i class="fa-solid fa-bolt"></i> Popular Questions:</span>
+              <button class="chip-btn" data-query="What are the CSE admission fees and eligibility?">💰 CSE Fees</button>
+              <button class="chip-btn" data-query="What is today's schedule for 5th Sem CSE?">📅 Today's Timetable</button>
+              <button class="chip-btn" data-query="How do I register for Srikanta Boy's Hostel?">🏨 Hostel Application</button>
+              <button class="chip-btn" data-query="Show me the latest placement statistics for 2025-2026">🏆 Placement Stats</button>
+              <button class="chip-btn" data-query="What are the GM Central Library operating hours?">📚 Library Hours</button>
+              <button class="chip-btn" data-query="Where is the GMU Training & Placement Cell located?">📍 Find TPO Cell</button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="gmu-stat-orb">
+              <div class="orb-inner">
+                <span class="orb-number">57</span>
+                <span class="orb-label">Acres Green Campus</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats Overview Grid -->
+        <div class="stats-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-icon icon-emerald"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="dashSgpa">8.92</span>
+              <span class="stat-label">Current SGPA (Target: 9.0)</span>
+            </div>
+            <div class="stat-badge badge-emerald">+0.3 vs Last Sem</div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-icon icon-amber"><i class="fa-solid fa-clipboard-user"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="dashAttendance">88.5%</span>
+              <span class="stat-label">Overall Attendance</span>
+            </div>
+            <div class="stat-badge badge-amber">✅ Above 85% Limit</div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-icon icon-purple"><i class="fa-solid fa-list-check"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="dashTasks">2 Pending</span>
+              <span class="stat-label">Assignments & IA Prep</span>
+            </div>
+            <div class="stat-badge badge-purple">Due in 3 days</div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-icon icon-cyan"><i class="fa-solid fa-book"></i></div>
+            <div class="stat-data">
+              <span class="stat-value" id="dashLibrary">1 Book Due</span>
+              <span class="stat-label">Central Library Book</span>
+            </div>
+            <div class="stat-badge badge-cyan">Return by Aug 24</div>
+          </div>
+        </div>
+
+        <!-- AI Recommendations & Smart Insights -->
+        <div class="dashboard-sections-grid">
+          <div class="section-column">
+            <div class="section-header">
+              <h3><i class="fa-solid fa-brain text-gradient"></i> AI Personal Recommendations</h3>
+              <span class="sub-text">Tailored for B.Tech CSE &bull; AI Powered</span>
+            </div>
+            <div class="recommendations-container" id="recommendationsList">
+              <!-- Dynamically Populated -->
+            </div>
+          </div>
+
+          <div class="section-column">
+            <div class="section-header">
+              <h3><i class="fa-solid fa-bell text-gold"></i> Live Campus Circulars</h3>
+              <button class="btn-text" id="viewAllNoticesBtn">View All <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="notices-brief-list" id="dashboardNoticesList">
+              <!-- Dynamically Populated -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: CONVERSATIONAL AI CHATBOT -->
+      <section id="tab-chat" class="tab-page">
+        <div class="chat-wrapper glass-card">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="bot-info">
+              <div class="bot-avatar pulse-glow">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div>
+                <h3 id="chatTitle">GMU CampusMind Assistant</h3>
+                <p class="chat-status"><i class="fa-solid fa-circle text-success"></i> Active Knowledge Base &bull; Natural Language AI</p>
+              </div>
+            </div>
+
+            <div class="chat-actions">
+              <div class="voice-wave-container" id="voiceWaveContainer">
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+              </div>
+              <button id="speakLastResponseBtn" class="btn-secondary" title="Read Aloud Last Message"><i class="fa-solid fa-volume-high"></i> Speak</button>
+              <button id="clearChatBtn" class="btn-secondary" title="Clear Conversation"><i class="fa-solid fa-trash-can"></i> Clear</button>
+            </div>
+          </div>
+
+          <!-- Chat Messages Container -->
+          <div class="chat-messages" id="chatMessages">
+            <!-- Initial Bot Welcome Message -->
+            <div class="chat-message bot">
+              <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+              <div class="msg-body">
+                <div class="msg-header">
+                  <span class="sender-name">CampusMind AI</span>
+                  <span class="msg-time">Just now</span>
+                </div>
+                <div class="msg-text">
+                  Hello! I am your <strong>GM University AI Campus Assistant</strong>. You can ask me anything about:
+                  <ul>
+                    <li>📚 <strong>Admissions & Courses:</strong> CSE, AIML, ECE, EEE, Robotics, Law, MBA, B.Com, Nursing</li>
+                    <li>💰 <strong>Fee Structure & Scholarships:</strong> SSP, e-Pass, Merit Concessions</li>
+                    <li>🏨 <strong>Campus Hostels:</strong> Srikanta (Boys) & Saraswathi (Girls) admissions & facilities</li>
+                    <li>🏆 <strong>Placement Cell:</strong> Top recruiters, highest packages, TPO contacts</li>
+                    <li>📅 <strong>Exams & Calendar:</strong> Internal assessment dates, VTU/GMU circulars</li>
+                  </ul>
+                  How can I help you today?
+                </div>
+                <div class="source-badge"><i class="fa-solid fa-shield-halved"></i> Verified GMU Knowledge Base</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Chips in Chat -->
+          <div class="chat-quick-suggestions">
+            <span class="suggest-label">Suggestions:</span>
+            <button class="suggest-chip" data-query="What is the admission procedure for B.Tech CSE at GM University?">B.Tech Admissions</button>
+            <button class="suggest-chip" data-query="Tell me about placement companies at GMU Davangere">Placements 2025</button>
+            <button class="suggest-chip" data-query="Where is the GM Central Library and what are the rules?">Central Library</button>
+            <button class="suggest-chip" data-query="How do I contact HOD of Computer Science department?">HOD CS Contact</button>
+            <button class="suggest-chip" data-query="What are the bus routes available for Davangere local students?">Bus Routes</button>
+          </div>
+
+          <!-- Chat Input Controls -->
+          <div class="chat-input-bar">
+            <button id="chatMicBtn" class="btn-icon btn-mic" title="Voice Input (Speech-to-Text)"><i class="fa-solid fa-microphone"></i></button>
+            <textarea id="chatInput" placeholder="Ask GMU CampusMind anything (e.g. 'What is the eligibility for Robotics & Automation?')..." rows="1" aria-label="Type your message"></textarea>
+            <button id="sendMessageBtn" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: SMART INFORMATION SEARCH -->
+      <section id="tab-search" class="tab-page">
+        <div class="search-page-container">
+          <div class="search-header-box glass-card">
+            <h2><i class="fa-solid fa-magnifying-glass text-cyan"></i> Smart Campus Search & Directory</h2>
+            <p>Instant search across syllabus, faculty directory, circulars, department contacts, fee tables, and campus facilities.</p>
+            
+            <div class="main-search-input-wrapper">
+              <i class="fa-solid fa-search"></i>
+              <input type="text" id="smartSearchQuery" placeholder="Search by keyword (e.g., 'CSE HOD', 'Fees', 'Srikanta Hostel', 'Syllabus', 'Placement', 'Bus')..." aria-label="Smart Search Query">
+              <button id="clearSearchBtn" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Filter Categories -->
+            <div class="filter-tabs" id="searchFilterTabs">
+              <button class="filter-btn active" data-filter="all">All Resources</button>
+              <button class="filter-btn" data-filter="academics">🎓 Academics & Courses</button>
+              <button class="filter-btn" data-filter="admissions">💰 Fees & Admissions</button>
+              <button class="filter-btn" data-filter="faculty">👨‍🏫 Faculty & HODs</button>
+              <button class="filter-btn" data-filter="facilities">🏫 Hostel & Campus</button>
+              <button class="filter-btn" data-filter="circulars">📄 Circulars & Notices</button>
+            </div>
+          </div>
+
+          <!-- Results Grid -->
+          <div class="search-results-stats">
+            <span id="resultsCount">Showing 12 matching resources</span>
+          </div>
+
+          <div class="search-results-grid" id="searchResultsGrid">
+            <!-- Dynamically Rendered -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: STUDENT ASSISTANCE SUITE -->
+      <section id="tab-student-suite" class="tab-page">
+        <div class="suite-container">
+          <div class="suite-header">
+            <h2><i class="fa-solid fa-user-graduate text-gold"></i> Student Assistance Suite</h2>
+            <p>Comprehensive academic tools: Timetable, SGPA/CGPA Calculator, Attendance & Safe-Skip Predictor, Assignment Kanban, & Library Reservations.</p>
+          </div>
+
+          <!-- Suite Sub-Navigation Tabs -->
+          <div class="suite-nav-tabs">
+            <button class="suite-tab-btn active" data-suite="timetable"><i class="fa-solid fa-calendar-day"></i> Timetable</button>
+            <button class="suite-tab-btn" data-suite="gpa"><i class="fa-solid fa-calculator"></i> SGPA Calculator</button>
+            <button class="suite-tab-btn" data-suite="attendance"><i class="fa-solid fa-chart-line"></i> Attendance Predictor</button>
+            <button class="suite-tab-btn" data-suite="assignments"><i class="fa-solid fa-bars-progress"></i> Assignment Kanban</button>
+            <button class="suite-tab-btn" data-suite="library"><i class="fa-solid fa-book-bookmark"></i> Library Reservation</button>
+          </div>
+
+          <!-- SUB-PANEL 1: TIMETABLE -->
+          <div id="suite-panel-timetable" class="suite-panel active">
+            <div class="panel-card glass-card">
+              <div class="panel-header-actions">
+                <div>
+                  <h3><i class="fa-solid fa-clock text-cyan"></i> Daily Class Schedule</h3>
+                  <p id="schedulePersonaLabel">5th Semester B.Tech Computer Science & Engineering (Section A)</p>
+                </div>
+                <div class="day-selector">
+                  <button class="day-btn" data-day="Mon">Mon</button>
+                  <button class="day-btn active" data-day="Tue">Tue</button>
+                  <button class="day-btn" data-day="Wed">Wed</button>
+                  <button class="day-btn" data-day="Thu">Thu</button>
+                  <button class="day-btn" data-day="Fri">Fri</button>
+                  <button class="day-btn" data-day="Sat">Sat</button>
+                </div>
+              </div>
+
+              <div class="timetable-grid" id="timetableList">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-PANEL 2: SGPA / CGPA CALCULATOR -->
+          <div id="suite-panel-gpa" class="suite-panel">
+            <div class="gpa-calculator-wrapper glass-card">
+              <div class="gpa-header">
+                <div>
+                  <h3><i class="fa-solid fa-calculator text-emerald"></i> GMU VTU-Grading SGPA & CGPA Calculator</h3>
+                  <p>Calculate your semester SGPA based on subject credits and letter grades.</p>
+                </div>
+                <div class="gpa-score-display">
+                  <span class="score-label">Calculated SGPA</span>
+                  <span class="score-num" id="calcSgpaValue">8.92</span>
+                </div>
+              </div>
+
+              <div class="gpa-subjects-table">
+                <table class="styled-table">
+                  <thead>
+                    <tr>
+                      <th>Subject Code</th>
+                      <th>Subject Title</th>
+                      <th>Credits</th>
+                      <th>Grade Achieved</th>
+                      <th>Grade Points</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gpaSubjectsBody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="gpa-actions">
+                <button id="addSubjectRowBtn" class="btn-secondary"><i class="fa-solid fa-plus"></i> Add Subject</button>
+                <button id="recalculateGpaBtn" class="btn-primary"><i class="fa-solid fa-rotate"></i> Recalculate SGPA</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-PANEL 3: ATTENDANCE & SAFE-SKIP PREDICTOR -->
+          <div id="suite-panel-attendance" class="suite-panel">
+            <div class="attendance-wrapper glass-card">
+              <div class="attendance-header">
+                <h3><i class="fa-solid fa-shield-heart text-amber"></i> Attendance & Safe-Skip Simulator</h3>
+                <p>Calculate safe skips to maintain GM University mandatory 85% attendance criteria.</p>
+              </div>
+
+              <div class="attendance-grid">
+                <div class="attendance-stat-box">
+                  <div class="circle-progress" id="attendanceProgressRing">
+                    <span class="circle-val" id="attPercentVal">88.5%</span>
+                  </div>
+                  <p class="ring-status text-success">Good Standing ✅</p>
+                </div>
+
+                <div class="attendance-calc-form">
+                  <div class="form-group">
+                    <label for="attTotalClasses">Total Classes Conducted So Far</label>
+                    <input type="number" id="attTotalClasses" value="120" min="1">
+                  </div>
+                  <div class="form-group">
+                    <label for="attAttendedClasses">Classes Attended</label>
+                    <input type="number" id="attAttendedClasses" value="106" min="0">
+                  </div>
+                  <div class="form-group">
+                    <label for="attTargetMin">Minimum Required Percentage (%)</label>
+                    <input type="number" id="attTargetMin" value="85" min="50" max="100">
+                  </div>
+                  
+                  <div class="prediction-output-box" id="attPredictionResult">
+                    <i class="fa-solid fa-lightbulb text-gold"></i>
+                    <div>
+                      <strong>Safe Skip Prediction:</strong>
+                      <p id="attPredictionText">You can safely skip <strong>4 upcoming lectures</strong> and still remain above 85.0% threshold!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-PANEL 4: ASSIGNMENT KANBAN -->
+          <div id="suite-panel-assignments" class="suite-panel">
+            <div class="kanban-wrapper">
+              <div class="kanban-header">
+                <h3><i class="fa-solid fa-bars-progress text-purple"></i> Academic Submissions & IA Taskboard</h3>
+                <button id="addAssignmentBtn" class="btn-primary"><i class="fa-solid fa-plus"></i> New Task</button>
+              </div>
+
+              <div class="kanban-columns">
+                <div class="kanban-column">
+                  <div class="col-header col-todo">
+                    <h4><i class="fa-solid fa-circle-dot"></i> To Do / Pending</h4>
+                    <span class="count-badge" id="todoCount">2</span>
+                  </div>
+                  <div class="kanban-cards" id="kanbanTodo">
+                    <!-- Dynamically Populated -->
+                  </div>
+                </div>
+
+                <div class="kanban-column">
+                  <div class="col-header col-inprogress">
+                    <h4><i class="fa-solid fa-spinner"></i> In Progress</h4>
+                    <span class="count-badge" id="inprogressCount">1</span>
+                  </div>
+                  <div class="kanban-cards" id="kanbanInprogress">
+                    <!-- Dynamically Populated -->
+                  </div>
+                </div>
+
+                <div class="kanban-column">
+                  <div class="col-header col-done">
+                    <h4><i class="fa-solid fa-circle-check"></i> Completed</h4>
+                    <span class="count-badge" id="doneCount">3</span>
+                  </div>
+                  <div class="kanban-cards" id="kanbanDone">
+                    <!-- Dynamically Populated -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-PANEL 5: LIBRARY RESERVATION -->
+          <div id="suite-panel-library" class="suite-panel">
+            <div class="library-wrapper glass-card">
+              <div class="library-header">
+                <div>
+                  <h3><i class="fa-solid fa-book-open-reader text-cyan"></i> GM Central Library Digital Reservation</h3>
+                  <p>Search over 45,000+ textbooks, IEEE reference papers, and reserve copies instantly.</p>
+                </div>
+                <div class="library-stats-pill">
+                  <span><i class="fa-solid fa-book"></i> Central Library Active Tokens: 1 Reserved</span>
+                </div>
+              </div>
+
+              <div class="library-search-bar">
+                <input type="text" id="librarySearchInput" placeholder="Search book title, author, or ISBN (e.g. 'Operating Systems', 'Tanenbaum', 'Database')...">
+                <button id="librarySearchBtn" class="btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search Catalog</button>
+              </div>
+
+              <div class="library-books-grid" id="libraryBooksGrid">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: EVENTS & NOTICES DISCOVERY -->
+      <section id="tab-events" class="tab-page">
+        <div class="events-page-wrapper">
+          <div class="events-hero glass-card">
+            <h2><i class="fa-solid fa-calendar-star text-gold"></i> GMU Campus Events & Official Circulars</h2>
+            <p>Stay informed on upcoming tech symposiums, sports tournaments, placement drives, and official GM University announcements.</p>
+          </div>
+
+          <div class="events-content-grid">
+            <!-- Left: Featured Events Carousel / List -->
+            <div class="events-list-column">
+              <h3><i class="fa-solid fa-fire text-amber"></i> Upcoming Campus Events & Fests</h3>
+              <div class="events-grid" id="eventsGrid">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+
+            <!-- Right: Official Downloadable Circulars -->
+            <div class="circulars-column glass-card">
+              <h3><i class="fa-solid fa-file-pdf text-rose"></i> Official GMU Circulars</h3>
+              <p class="sub-text">Download authentic notification documents</p>
+              
+              <div class="circulars-list" id="officialCircularsList">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: INTERACTIVE CAMPUS MAP -->
+      <section id="tab-campus-map" class="tab-page">
+        <div class="map-page-wrapper glass-card">
+          <div class="map-header">
+            <div>
+              <h2><i class="fa-solid fa-map-location-dot text-emerald"></i> GM University Interactive Campus Map</h2>
+              <p>Explore the 57-acre green campus located on PB Road, Davangere. Click on hotspots to view block details, labs, and HOD offices.</p>
+            </div>
+            <div class="map-legend">
+              <span class="legend-item"><span class="dot dot-academic"></span> Academic Blocks</span>
+              <span class="legend-item"><span class="dot dot-hostel"></span> Hostels</span>
+              <span class="legend-item"><span class="dot dot-sports"></span> Sports & Canteen</span>
+              <span class="legend-item"><span class="dot dot-admin"></span> Admin & TPO</span>
+            </div>
+          </div>
+
+          <div class="map-viewport-container">
+            <div class="map-canvas-wrapper" id="mapCanvasWrapper">
+              <!-- Visual Vector Map Representation -->
+              <div class="gmu-campus-svg-map">
+                <!-- Map Background Layout -->
+                <div class="map-ground">
+                  <div class="map-road highway"><span>NH-48 Poona-Bangalore Highway</span></div>
+                  <div class="map-road main-gate-road"><span>Main Entrance Boulevard</span></div>
+
+                  <!-- Hotspot 1: FET Block -->
+                  <div class="map-hotspot academic" style="top: 25%; left: 30%;" data-location="fet_block">
+                    <div class="hotspot-pin"><i class="fa-solid fa-microchip"></i></div>
+                    <span class="hotspot-label">FET Engineering Block</span>
+                  </div>
+
+                  <!-- Hotspot 2: FCIT Block -->
+                  <div class="map-hotspot academic" style="top: 25%; left: 55%;" data-location="fcit_block">
+                    <div class="hotspot-pin"><i class="fa-solid fa-laptop-code"></i></div>
+                    <span class="hotspot-label">FCIT & CS Labs</span>
+                  </div>
+
+                  <!-- Hotspot 3: Central Library -->
+                  <div class="map-hotspot academic" style="top: 48%; left: 42%;" data-location="central_library">
+                    <div class="hotspot-pin"><i class="fa-solid fa-book-open"></i></div>
+                    <span class="hotspot-label">GM Central Library</span>
+                  </div>
+
+                  <!-- Hotspot 4: Admin Block -->
+                  <div class="map-hotspot admin" style="top: 70%; left: 25%;" data-location="admin_block">
+                    <div class="hotspot-pin"><i class="fa-solid fa-building-columns"></i></div>
+                    <span class="hotspot-label">Admin & Registrar Block</span>
+                  </div>
+
+                  <!-- Hotspot 5: Srikanta Boys Hostel -->
+                  <div class="map-hotspot hostel" style="top: 20%; left: 80%;" data-location="srikanta_hostel">
+                    <div class="hotspot-pin"><i class="fa-solid fa-hotel"></i></div>
+                    <span class="hotspot-label">Srikanta Boys Hostel</span>
+                  </div>
+
+                  <!-- Hotspot 6: Saraswathi Girls Hostel -->
+                  <div class="map-hotspot hostel" style="top: 45%; left: 82%;" data-location="saraswathi_hostel">
+                    <div class="hotspot-pin"><i class="fa-solid fa-spa"></i></div>
+                    <span class="hotspot-label">Saraswathi Girls Hostel</span>
+                  </div>
+
+                  <!-- Hotspot 7: Food Court & Canteen -->
+                  <div class="map-hotspot sports" style="top: 65%; left: 60%;" data-location="food_court">
+                    <div class="hotspot-pin"><i class="fa-solid fa-utensils"></i></div>
+                    <span class="hotspot-label">GM Food Court & Cafe</span>
+                  </div>
+
+                  <!-- Hotspot 8: Sports Arena -->
+                  <div class="map-hotspot sports" style="top: 75%; left: 78%;" data-location="sports_arena">
+                    <div class="hotspot-pin"><i class="fa-solid fa-volleyball"></i></div>
+                    <span class="hotspot-label">Sports Ground & Stadium</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location Details Sidebar / Overlay -->
+            <div class="location-detail-panel glass-card" id="locationDetailPanel">
+              <div class="loc-header">
+                <span class="loc-badge" id="locBadge">Academic Block</span>
+                <h3 id="locTitle">FET Engineering Block</h3>
+              </div>
+              <div class="loc-body">
+                <p id="locDescription">Houses Computer Science, AIML, Electronics, Electrical, and Mechanical engineering departments, state-of-the-art AI research labs, and HOD suites.</p>
+                
+                <div class="loc-meta">
+                  <div class="meta-row"><strong>Operating Hours:</strong> <span id="locHours">8:30 AM - 5:30 PM</span></div>
+                  <div class="meta-row"><strong>Key Departments:</strong> <span id="locDepts">CSE, ISE, ECE, EEE, Mech, Biotech</span></div>
+                  <div class="meta-row"><strong>Floor Guide:</strong> <span id="locFloors">Ground: Deans Office &bull; 1st Floor: ECE & EEE &bull; 2nd Floor: CSE & AIML Labs</span></div>
+                </div>
+
+                <div class="loc-actions">
+                  <button id="locAskAiBtn" class="btn-primary"><i class="fa-solid fa-robot"></i> Ask AI About This Block</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- API KEY & CONFIG MODAL -->
+  <div id="apiKeyModal" class="modal-overlay">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-key text-gold"></i> AI Engine Settings</h3>
+        <button id="closeModalBtn" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>GMU CampusMind AI includes an offline built-in knowledge engine. Optionally, enter your Gemini API key for live AI web reasoning:</p>
+        <div class="form-group">
+          <label for="geminiApiKeyInput">Gemini API Key (Optional)</label>
+          <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="saveApiKeyBtn" class="btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Application Bundle -->
+  <script src="app.js"></script>
+</body>
+</html>
